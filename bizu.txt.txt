@@ -1,0 +1,48 @@
+https://www.youtube.com/watch?v=ukxQNJ_mVoQ
+
+
+3.361 visualizações  23 de nov. de 2020  CURITIBA
+E aí, meus consagrados! Tudo bem? Nessa série de vídeos estaremos tratando de um assunto muito importante em arquiteturas distribuídas que é a comunicação assíncrona utilizando troca de mensagens. Durante os vídeos vamos codar ao vivaço utilizando c# + .net core 3.1, RabbitMQ e o Framework MassTransit.
+
+Nessa primeira parte você terá uma introdução sobre os conteúdos que serão abordados durante todas as partes da série e instruções de como utilizar o projeto base disponibilizado no GitHub :)
+
+Repositório com o projeto base e a solução completa:
+https://github.com/diegobrunetti/mass...
+
+Download e instalação do Docker:
+https://docs.docker.com/get-docker/
+
+Site oficial do MassTransit:
+https://masstransit-project.com/
+
+Site oficial do RabbitMQ:
+https://www.rabbitmq.com/
+
+---------- Todos os vídeos dessa série ----------
+
+Parte 1: Comunicação assíncrona com .NET Core, RabbitMQ e MassTransit
+   • Parte 1: Comunicação assíncrona com .NET C...  
+
+Parte 2: Introdução ao RabbitMQ
+   • Parte 2: Introdução ao RabbitMQ  
+
+Parte 3: Exchanges tipo Fanout
+   • Parte 3: Exchanges tipo Fanout (RabbitMQ)  
+
+Parte 4: Exchanges tipo Direct
+   • Parte 4: Exchanges tipo Direct (RabbitMQ)  
+
+Parte 5: Exchanges tipo Topic
+   • Parte 5: Exchanges tipo Topic (RabbitMQ)  
+
+Parte 6: Consumindo mensagens de uma fila (manualmente)
+   • Parte 6: Consumindo mensagens de uma fila ...  
+
+Parte 7: Configurando o MassTransit
+   • Parte 7: Configurando o MassTransit (C# As...  
+
+Parte 8: Producers
+   • Parte 8: MassTransit Producers  (C# Asp.NE...  
+
+Parte 9: Consumers
+   • Parte 9: MassTransit Consumers (C# Asp.NET...  

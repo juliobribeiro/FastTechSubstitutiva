@@ -1,0 +1,26 @@
+global:
+  scrape_interval:     10s 
+scrape_configs:
+  - job_name: 'my-api-read-prometheus'
+    static_configs:
+    - targets: ['fiap.6nett-grupo31.service:8080']
+  
+  - job_name: 'add-contact-prometheus'
+    static_configs:
+    - targets: ['add-contact:8081']
+  
+  - job_name: 'update-contact-prometheus'
+    static_configs:
+    - targets: ['update-contact:8082']
+  
+  - job_name: 'delete-contact-prometheus'
+    static_configs:
+    - targets: ['delete-contact:8083']      
+  
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+  
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['prometheus:9090']

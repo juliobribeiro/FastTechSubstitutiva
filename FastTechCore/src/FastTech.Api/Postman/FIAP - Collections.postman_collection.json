@@ -1,0 +1,265 @@
+{
+	"info": {
+		"_postman_id": "96163545-930c-459b-a6ff-014cc4570fb9",
+		"name": "FIAP - Collections",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27523987"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Insert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmM2U3MDEyMS05YWQyLTQ3YTUtYjVmYS1lODU0ZDNkZDE0ZjYiLCJ1bmlxdWVfbmFtZSI6IkdhYnJpZWwgTG91cmVpcm8iLCJlbWFpbCI6ImdhYnJpZWxsb3VyZWlyb0BvdXRsb29rLmNvbS5iciIsInJvbGUiOiIxIiwibmJmIjoxNzMwNjU0MTc2LCJleHAiOjE3MzA2NzIxNzYsImlhdCI6MTczMDY1NDE3Nn0.8MJRg9OjGMy79u1kI2fh_9XwqD8gBQDfsPzQS_HGXDM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Gabriel Novo Teste Novo Novo\",\r\n  \"email\": \"gabriel.loureiro_teste_novo_novo@teste.com.br\",\r\n  \"password\": \"@Abc1234\",\r\n  \"permission_level\": 2,\r\n  \"ddd\": \"11\",\r\n  \"phone_number\": \"595959595\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5056/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5056",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Accounts",
+			"item": [
+				{
+					"name": "GetToken",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"gabrielloureiro@outlook.com.br\",\r\n  \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5056/accounts/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5056",
+							"path": [
+								"accounts",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ItemCardapio",
+			"item": [
+				{
+					"name": "Insert",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmM2U3MDEyMS05YWQyLTQ3YTUtYjVmYS1lODU0ZDNkZDE0ZjYiLCJ1bmlxdWVfbmFtZSI6IkdhYnJpZWwgTG91cmVpcm8iLCJlbWFpbCI6ImdhYnJpZWxsb3VyZWlyb0BvdXRsb29rLmNvbS5iciIsInJvbGUiOiIxIiwibmJmIjoxNzMwNjU1MjUzLCJleHAiOjE3MzA2NzMyNTMsImlhdCI6MTczMDY1NTI1M30.-EdMOTXNf0hExjwBmiDxbAVjJ2Nxf0SfulaGtKmervU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Gab Lou \",\r\n  \"email\": \"gab.lou@teste.com.br\",\r\n  \"ddd\": 13,\r\n  \"phone_number\": \"959595954\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5056/ItemCardapios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5056",
+							"path": [
+								"ItemCardapios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmM2U3MDEyMS05YWQyLTQ3YTUtYjVmYS1lODU0ZDNkZDE0ZjYiLCJ1bmlxdWVfbmFtZSI6IkdhYnJpZWwgTG91cmVpcm8iLCJlbWFpbCI6ImdhYnJpZWxsb3VyZWlyb0BvdXRsb29rLmNvbS5iciIsInJvbGUiOiIxIiwibmJmIjoxNzMwNjUwMDI2LCJleHAiOjE3MzA2NjgwMjYsImlhdCI6MTczMDY1MDAyNn0.mdQGXOZ0mfJauvplR5kS1NnBYIKpMG6yWuZDjQ8yHTU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Gab Lou \",\r\n  \"email\": \"gab.lou@teste.com.br\",\r\n  \"ddd\": 13,\r\n  \"phone_number\": \"959595954\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5056/ItemCardapios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5056",
+							"path": [
+								"ItemCardapios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmM2U3MDEyMS05YWQyLTQ3YTUtYjVmYS1lODU0ZDNkZDE0ZjYiLCJ1bmlxdWVfbmFtZSI6IkdhYnJpZWwgTG91cmVpcm8iLCJlbWFpbCI6ImdhYnJpZWxsb3VyZWlyb0BvdXRsb29rLmNvbS5iciIsInJvbGUiOiIxIiwibmJmIjoxNzMwNjU1NDk3LCJleHAiOjE3MzA2NzM0OTcsImlhdCI6MTczMDY1NTQ5N30.4kcltaXFiAHBIGihGx5tIm9fz2DiBI0gUlVmKuAkm_8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Gab Lou \",\r\n  \"email\": \"gab.lou@teste.com.br\",\r\n  \"ddd\": 13,\r\n  \"phone_number\": \"959595954\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5056/ItemCardapios/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5056",
+							"path": [
+								"ItemCardapios",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6a31fb70-793c-4eda-a8b1-7b7c7b21ecc9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find By DDD",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmM2U3MDEyMS05YWQyLTQ3YTUtYjVmYS1lODU0ZDNkZDE0ZjYiLCJ1bmlxdWVfbmFtZSI6IkdhYnJpZWwgTG91cmVpcm8iLCJlbWFpbCI6ImdhYnJpZWxsb3VyZWlyb0BvdXRsb29rLmNvbS5iciIsInJvbGUiOiIxIiwibmJmIjoxNzMwNjU1NjI4LCJleHAiOjE3MzA2NzM2MjgsImlhdCI6MTczMDY1NTYyOH0.TJ1yvPSAfZsUV6MLw-ASCj0QjYQX7jqGlnBD2fnF9wA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5056/ItemCardapios/find/:ddd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5056",
+							"path": [
+								"ItemCardapios",
+								"find",
+								":ddd"
+							],
+							"variable": [
+								{
+									"key": "ddd",
+									"value": "11"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

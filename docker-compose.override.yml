@@ -1,0 +1,26 @@
+services:
+  fasttech:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "8080"
+  # add-contact:
+  #  environment:
+  #   - ASPNETCORE_ENVIRONMENT=Production
+  #   - ASPNETCORE_HTTP_PORTS=8081
+  #  ports:
+  #   - "8081"
+  # update-contact:
+  #  environment:
+  #   - ASPNETCORE_ENVIRONMENT=Production
+  #   - ASPNETCORE_HTTP_PORTS=8082
+  #  ports:
+  #   - "8082"
+  # delete-contact:
+  #  environment:
+  #   - ASPNETCORE_ENVIRONMENT=Production
+  #   - ASPNETCORE_HTTP_PORTS=8083
+  #  ports:
+  #   - "8083"    
+

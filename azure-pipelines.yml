@@ -1,0 +1,52 @@
+# azure-pipelines.yml
+trigger:
+- master
+
+pool:
+  name: Default
+
+variables:
+  buildConfiguration: 'Release'
+  outputDir: '$(Build.ArtifactStagingDirectory)/publish'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restaurar dependências'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Fazer o Build'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--no-restore --configuration $(buildConfiguration)'
+  
+- task: DotNetCoreCLI@2
+  displayName: 'Executar Testes'
+  inputs:
+    command: 'test'
+    projects: '**/*Tests.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Fazer o Publish'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--no-build --configuration $(buildConfiguration) --output $(outputDir)'
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Salvar artefatos do build'
+  inputs:
+    PathtoPublish: '$(outputDir)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

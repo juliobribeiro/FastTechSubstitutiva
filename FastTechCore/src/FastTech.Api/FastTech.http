@@ -1,0 +1,6 @@
+@FastTech.Api_HostAddress = http://localhost:5056
+
+GET {{FastTech.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

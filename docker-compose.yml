@@ -1,0 +1,55 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    environment:
+      SA_PASSWORD: '@fiap2024'
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    volumes:
+      - /c/dados/volumes/sqlserver:/var/opt/mssql/data:rw       
+    networks:
+      - mynw 
+
+  rabbitmq:
+    # image: rabbitmq:3-management
+    image: masstransit/rabbitmq
+    container_name: rabbitmq
+    ports: 
+     - 5672:5672
+     - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - mynw 
+       
+  fasttech:
+    image: fasttechapi
+    build:
+      context: .
+      dockerfile: FastTechCore/src/FastTech.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sqlserver
+      - rabbitmq
+    networks:
+      - mynw 
+
+  fasttechkitchen:
+    image: fastechkitchenapi
+    build:
+      context: .
+      dockerfile: FastTechKitchen/FasTechKitchenApi/Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - sqlserver
+      - rabbitmq
+    networks:
+      - mynw 
+
+networks:
+  mynw:
