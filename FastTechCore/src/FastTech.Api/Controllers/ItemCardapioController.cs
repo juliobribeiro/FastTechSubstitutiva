@@ -1,8 +1,7 @@
 ﻿using FastTech.Application.DataTransferObjects;
 using FastTech.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static FastTech.Domain.Constants.AppConstants;
+
 
 namespace FastTech.Api.Controllers
 {
@@ -19,7 +18,6 @@ namespace FastTech.Api.Controllers
         /// </summary>
         /// <returns>Itens do Cardápio</returns>
         [HttpGet]
-        [Authorize(Policy = Policies.Cliente)]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ItemCardapio), StatusCodes.Status200OK)]
         public async Task<object> GetAll()
@@ -41,7 +39,6 @@ namespace FastTech.Api.Controllers
         /// <param name="model">Objeto com as propriedades para criar um novo ItemCardapio</param>
         /// <returns>Um objeto do ItemCardapio criado</returns>
         [HttpPost]
-        [Authorize(Policy = Policies.Gerente)]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ItemCardapio), StatusCodes.Status200OK)]
         public async Task<object> Create([FromBody] BasicItemCardapio model)
@@ -63,7 +60,6 @@ namespace FastTech.Api.Controllers
         /// <param name="model">Objeto com as propriedades para editar um Item do Cardapio</param>
         /// <returns>Um objeto do Item do Cardapio criado</returns>
         [HttpPut]
-        [Authorize(Policy = Policies.Gerente)]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ItemCardapio), StatusCodes.Status200OK)]
         public async Task<object> Update([FromBody] ItemCardapio model)

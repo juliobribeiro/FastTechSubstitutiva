@@ -19,7 +19,7 @@ public class ItemCardapioApplicationService(
 
     public async Task<List<ItemCardapio>> GetAll()
     {
-        var itemCardapios = _ItemCardapioService.GetAll();
+        var itemCardapios =  _ItemCardapioService.GetAll();
         return _mapper.Map<List<ItemCardapio>>(itemCardapios);
     }
 
@@ -99,5 +99,21 @@ public class ItemCardapioApplicationService(
         _ItemCardapioService.Dispose();
 
         GC.SuppressFinalize(this);
+    }
+
+    public async Task PublishAsync(string message, string rountingKey)
+    {
+        switch (rountingKey)
+        {
+            case AppConstants.Routes.RabbitMQ.ItemCardapioInsert:
+                var ItemCardapioInsert = JsonSerializer.Deserialize<MSG.BasicItemCardapio>(message);
+                await Add(ItemCardapioInsert);
+                break;
+
+            case AppConstants.Routes.RabbitMQ.ItemCardapioUpdate:
+                var ItemCardapioUpdate = JsonSerializer.Deserialize<MSG.ItemCardapio>(message);
+                await Update(ItemCardapioUpdate);
+                break;
+        }
     }
 }

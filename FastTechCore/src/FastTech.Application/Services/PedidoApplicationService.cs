@@ -63,37 +63,37 @@ public class PedidoApplicationService(IPedidoService PedidoService, IMapper mapp
         return _mapper.Map<Pedido>(Pedido);
     }
 
-    public async Task Consumer(string message, string rountingKey)
-    {
-        switch (rountingKey)
-        {
-            case AppConstants.Routes.RabbitMQ.PedidoInsert:
-                var PedidoInsert = JsonSerializer.Deserialize<MSG.BasicPedido>(message);
-                await Add(PedidoInsert);
-                break;
+    //public async Task Consumer(string message, string rountingKey)
+    //{
+    //    switch (rountingKey)
+    //    {
+    //        case AppConstants.Routes.RabbitMQ.PedidoInsert:
+    //            var PedidoInsert = JsonSerializer.Deserialize<MSG.BasicPedido>(message);
+    //            await Add(PedidoInsert);
+    //            break;
 
-            case AppConstants.Routes.RabbitMQ.PedidoUpdate:
-                var PedidoUpdate = JsonSerializer.Deserialize<MSG.Pedido>(message);
-                await Update(PedidoUpdate);
-                break;
-        }
-    }
+    //        case AppConstants.Routes.RabbitMQ.PedidoUpdate:
+    //            var PedidoUpdate = JsonSerializer.Deserialize<MSG.Pedido>(message);
+    //            await Update(PedidoUpdate);
+    //            break;
+    //    }
+    //}
 
-    public async Task PublishAsync(string message, string rountingKey)
-    {
-        switch (rountingKey)
-        {
-            case AppConstants.Routes.RabbitMQ.PedidoInsert:
-                var PedidoInsert = JsonSerializer.Deserialize<MSG.BasicPedido>(message);
-                await Add(PedidoInsert);
-                break;
+    //public async Task PublishAsync(object message, string rountingKey)
+    //{
+    //    switch (rountingKey)
+    //    {
+    //        case AppConstants.Routes.RabbitMQ.PedidoInsert:
+    //            var PedidoInsert = JsonSerializer.Deserialize<MSG.BasicPedido>(message);
+    //            await Add(PedidoInsert);
+    //            break;
 
-            case AppConstants.Routes.RabbitMQ.PedidoUpdate:
-                var PedidoUpdate = JsonSerializer.Deserialize<MSG.Pedido>(message);
-                await Update(PedidoUpdate);
-                break;
-        }
-    }
+    //        case AppConstants.Routes.RabbitMQ.PedidoUpdate:
+    //            var PedidoUpdate = JsonSerializer.Deserialize<MSG.Pedido>(message);
+    //            await Update(PedidoUpdate);
+    //            break;
+    //    }
+    //}
 
     public void Dispose()
     {

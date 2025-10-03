@@ -2,32 +2,68 @@ using FastTech.Application.DataTransferObjects;
 using FastTech.Application.Interfaces;
 using MassTransit;
 
-public class PedidoConsumerService : IConsumer<List<BasicPedido>>
+//public class PedidoConsumerService : IConsumer<List<BasicPedido>>
+public class PedidoConsumerService : IConsumer<PedidoMessage>
 {
     //private readonly IConfiguration _configuration;
     //private readonly IServiceScopeFactory _scopeFactory;
 
     private readonly IPedidoApplicationService _pedidoAppService;
+    private readonly ILogger<PedidoConsumerService> _logger;
 
 
     //public PedidoConsumerService(IConfiguration configuration, IServiceScopeFactory scopeFactory)
-    public PedidoConsumerService(IPedidoApplicationService pedidoAppService)
+    public PedidoConsumerService(IPedidoApplicationService pedidoAppService, ILogger<PedidoConsumerService> logger)
     {
         //_configuration = configuration;
         //_scopeFactory = scopeFactory;
         _pedidoAppService = pedidoAppService;
+        _logger = logger;
     }
 
-    public async Task Consume(ConsumeContext<List<BasicPedido>> context)
+    //public async Task Consume(ConsumeContext<List<BasicPedido>> context)
+    public async Task Consume(ConsumeContext<PedidoMessage> context)
     {
-        var pedidos = context.Message;
-        if (pedidos is not null)
+        var mensagemRecebida = context.Message;
+
+        // Log para rastrear
+        _logger.LogInformation("Mensagem de Pedido recebida. Total de itens: {Count}",
+            mensagemRecebida.Pedido?.Count ?? 0);
+
+        if (mensagemRecebida.Pedido == null || !mensagemRecebida.Pedido.Any())
         {
-            foreach (var pedido in pedidos)
+            _logger.LogWarning("Mensagem recebida sem itens de pedido. Ignorando.");
+            return;
+        }
+
+        // Lógica de Negócio: Processa cada BasicPedido contido na mensagem.
+        foreach (var item in mensagemRecebida.Pedido)
+        {
+            try
             {
-                await _pedidoAppService.Add(pedido);
+                // Chama o Application Service para adicionar o pedido ao banco de dados ou processá-lo.
+                var novoPedido = await _pedidoAppService.Add(item);
+
+                _logger.LogInformation("Pedido processado com sucesso. ID do Novo Pedido: {Id}", novoPedido.Id);
+            }
+            catch (Exception ex)
+            {
+                // É crucial lidar com exceções para decidir se a mensagem deve ser repetida (retry)
+                // ou enviada para uma fila de erro (error queue).
+                _logger.LogError(ex, "Falha ao processar o pedido {Item}. Razão: {Message}",
+                    System.Text.Json.JsonSerializer.Serialize(item), ex.Message);
+
+                // Em um ambiente de produção, você pode relançar a exceção para o MassTransit 
+                // lidar com o Retry/Dead-Letter Queue (DLQ), ou tratar o erro de outra forma.
+                // throw; 
             }
         }
+
+        //foreach (var item in mensagemRecebida.Pedido)
+        //{
+        //    await _pedidoAppService.Add(pedido);
+        //}
+
     }
 
     //protected override async Task ExecuteAsync(CancellationToken stoppingToken)

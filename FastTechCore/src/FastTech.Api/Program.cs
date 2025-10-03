@@ -1,8 +1,8 @@
 using FastTech.Api.Filters;
 using FastTech.Api.Logging;
-using FastTech.Application.DataTransferObjects;
 using FastTech.Application.Interfaces;
 using FastTech.Application.Services;
+using FastTech.Contracts.DataTransferObjects;
 using FastTech.Domain.Entities;
 using FastTech.Domain.Interfaces;
 using FastTech.Domain.Interfaces.Infrastructure;
@@ -16,10 +16,10 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-//using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using FastTech.Application.Mappings;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,7 +36,7 @@ builder.Services.Configure<FastTechSettings>(builder.Configuration);
 
 builder.WebHost.UseUrls("http://localhost:5056");
 
-builder.Services.AddControllers(options => options.Filters.Add<UserFilter>()).AddNewtonsoftJson(options =>
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     var settings = options.SerializerSettings;
     settings.NullValueHandling = NullValueHandling.Ignore;
@@ -72,6 +72,8 @@ builder.Services.AddAutoMapper((sp, cfg) =>
     cfg.ConstructServicesUsing(sp.GetService);
 }, Assembly.GetAssembly(typeof(BaseModel)));
 
+builder.Services.AddAutoMapper(typeof(ItemCardapioMapper));
+
 builder.Logging.ClearProviders();
 builder.Logging.AddProvider(new CustomLoggerProvider(new CustomLoggerProviderConfiguration
 {
@@ -84,6 +86,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.LogTo(message => Debug.WriteLine(message), LogLevel.Information);
     options.EnableSensitiveDataLogging();
 });
+
 
 builder.Services.AddMemoryCache();
 
@@ -128,19 +131,12 @@ builder.Services.AddMassTransit(x =>
 {
     // Adiciona o consumidor à lista de consumidores do MassTransit
     x.AddConsumer<PedidoConsumerService>();
-    //x.AddConsumer<ItemCardapioConsumerService>();
-
+    
     x.UsingRabbitMq((context, cfg) =>
     {
         // Conecta ao host RabbitMQ
         cfg.Host(builder.Configuration.GetConnectionString("RabbitMq"));
-
-        //// Adiciona um endpoint para o novo consumidor ItemCardapioConsumerService
-        //cfg.ReceiveEndpoint("fasttech.itemcardapio", e =>
-        //{
-        //    e.ConfigureConsumer<ItemCardapioConsumerService>(context);
-        //});
-
+                
         // Configura o endpoint (fila) para o consumidor
         cfg.ReceiveEndpoint("fasttech.pedido", e =>
         {

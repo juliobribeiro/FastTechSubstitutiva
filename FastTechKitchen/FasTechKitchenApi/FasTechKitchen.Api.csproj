@@ -33,6 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\FastTech.Contracts\FastTech.Contracts.csproj" />
 		<ProjectReference Include="..\FastTechKitchen.Domain\FastTechKitchen.Domain.csproj" />
 		<ProjectReference Include="..\FastTechKitchen.Infraestructure\FastTechKitchen.Infraestructure.csproj" />
 		<ProjectReference Include="..\FastTechKitchenApplication\FastTechKitchen.Application.csproj" />

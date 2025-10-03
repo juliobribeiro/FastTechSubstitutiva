@@ -20,8 +20,6 @@ ATIVIDADE SUBSTITUTIVA FASE 4 – POSTECH
 
 \- \*\*TDD (Test-Driven Development)\*\*
 
-\- \*\*BDD (Behavior-Driven Development)\*\*
-
 
 
 \## Conteúdo do Projeto
@@ -66,7 +64,7 @@ Se você deseja contribuir para este projeto, sinta-se à vontade para abrir um 
 
 \*\* Instalações
 
-Dotnet 8 SDK e 
+Dotnet 8 SDK e
 
 Dotnet 8 Tools
 
@@ -82,7 +80,7 @@ https://www.docker.com/products/docker-desktop/
 
 
 
-docker run -e "ACCEPT\_EULA=Y" -e "SA\_PASSWORD=@fiap2024" -p 1433:1433 --name SqlServerFiap -d mcr.microsoft.com/mssql/server:2022-latest
+docker run -e "ACCEPT\_EULA=Y" -e "SA\_PASSWORD=@fiap2024" -p 1433:1433 --name FastTech -d mcr.microsoft.com/mssql/server:2022-latest
 
 
 
@@ -92,7 +90,9 @@ https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio
 
 
 
-dotnet ef migrations add "Adicionar o nome da Migration Aqui" --project MPCalcHub.Infrastructure --startup-project MPCalcHub.Api
+\*\* Rodar o migration
+
+PM> Update-Database --project FastTechCore\\FastTech.Infrastructure --startup-project FastTech.Api
 
 
 
@@ -105,6 +105,4 @@ Este projeto está licenciado sob a \[MIT License](LICENSE).
 
 
 teste CI/CD
-
-
 

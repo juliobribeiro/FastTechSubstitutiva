@@ -1,7 +1,7 @@
 using FasTechKitchen.Api.Filters;
 using FasTechKitchen.Api.Logging;
 using FasTechKitchen.Api.Robots.RabbitMQ;
-using FastTechKitchen.Application.DataTransferObjects;
+using FastTech.Contracts.DataTransferObjects;
 using FastTechKitchen.Application.Interfaces;
 using FastTechKitchen.Application.Services;
 using FastTechKitchen.Domain.Entities;

@@ -3,7 +3,7 @@ using FastTech.Application.Interfaces.RabbitMQ;
 
 namespace FastTech.Application.Interfaces;
 
-public interface IItemCardapioApplicationService : IBaseRabbitMQConsumer
+public interface IItemCardapioApplicationService //: IBaseRabbitMQConsumer
 {
     Task<ItemCardapio> GetById(Guid id);
     Task<ItemCardapio> Add(BasicItemCardapio model);

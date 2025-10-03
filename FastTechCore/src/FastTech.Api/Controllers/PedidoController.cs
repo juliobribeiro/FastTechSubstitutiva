@@ -1,5 +1,6 @@
-﻿using FastTech.Application.DataTransferObjects;
-using FastTech.Application.Interfaces;
+﻿using FastTech.Application.Interfaces;
+using FastTech.Contracts;
+using FastTech.Contracts.DataTransferObjects;
 using MassTransit;
 using MassTransit.Transports;
 using Microsoft.AspNetCore.Authorization;
@@ -13,13 +14,13 @@ namespace FastTech.Api.Controllers
     public class PedidoController(
         ILogger<PedidoController> logger,
         IPedidoApplicationService pedidoApplicationService,
-        IPublishEndpoint publishEndpoint
-        //IPedidoProducerService pedidoProducerService
+        IPublishEndpoint publishEndpoint,
+        ISendEndpointProvider sendEndpointProvider
     ) : BaseController(logger)
     {
         private readonly IPedidoApplicationService _pedidoApplicationService = pedidoApplicationService;
-        //private readonly IPedidoProducerService _pedidoProducerService = pedidoProducerService;
         private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
+        private readonly ISendEndpointProvider _sendEndpointProvider = sendEndpointProvider;
 
         /// <summary>
         /// Criar um novo Pedido
@@ -27,21 +28,23 @@ namespace FastTech.Api.Controllers
         /// <param name="listModel">Objeto com as propriedades para criar um novo Pedido</param>
         /// <returns>Status de envio à fila</returns>
         [HttpPost]
-        [Authorize(Policy = Policies.Cliente)]
         [Produces("application/json")]
         [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         public async Task<IActionResult> Create([FromBody] List<BasicPedido> listModel)
         {
             try
             {
-                // Publicar os pedidos na fila
-                // string jsonMessage = JsonSerializer.Serialize(listModel);
-
-                // await _pedidoProducerService.PublishMessageAsync(jsonMessage);
+                var mensagem = new PedidoMessage
+                {
+                    Pedido = listModel
+                };
+                                
+                var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(
+                    new Uri("queue:fasttech.pedido") // Nome da fila configurada no ReceiveEndpoint
+                );
 
                 // Publica a mensagem diretamente no RabbitMQ via MassTransit
-                await _publishEndpoint.Publish(listModel);
-
+                await sendEndpoint.Send(mensagem);
 
 
                 return Ok(new { message = "Pedidos enviados para a fila com sucesso." });

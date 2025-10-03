@@ -29,6 +29,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastTechKitchen.Infraestruc
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1035FEA7-FAC1-4D12-8F8F-82318D064FED}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contratos", "Contratos", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastTech.Contracts", "..\FastTech.Contracts\FastTech.Contracts.csproj", "{3A6FBB4B-90B6-4E6A-AB71-7AB8B08C32EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +79,10 @@ Global
 		{1035FEA7-FAC1-4D12-8F8F-82318D064FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1035FEA7-FAC1-4D12-8F8F-82318D064FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1035FEA7-FAC1-4D12-8F8F-82318D064FED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A6FBB4B-90B6-4E6A-AB71-7AB8B08C32EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A6FBB4B-90B6-4E6A-AB71-7AB8B08C32EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A6FBB4B-90B6-4E6A-AB71-7AB8B08C32EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A6FBB4B-90B6-4E6A-AB71-7AB8B08C32EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +97,7 @@ Global
 		{653B892D-020D-490C-9BA3-2CCF420FDBDF} = {B6E3A3E7-F59D-42C0-9120-BD61297E2D01}
 		{1B1A2489-C9D3-41EC-BC9C-B3E0650988E6} = {B6E3A3E7-F59D-42C0-9120-BD61297E2D01}
 		{E76EF2DB-FEC2-4CF5-BC56-C80E0F2B1DE2} = {B6E3A3E7-F59D-42C0-9120-BD61297E2D01}
+		{3A6FBB4B-90B6-4E6A-AB71-7AB8B08C32EB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B5E244B5-DC49-48E4-9F16-AF62439E8D9C}
