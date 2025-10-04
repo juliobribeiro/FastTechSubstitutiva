@@ -1,10 +1,9 @@
 using AutoMapper;
-using FastTechKitchen.Application.DataTransferObjects;
 using FastTechKitchen.Application.Interfaces;
-using FastTechKitchen.Domain.Constants;
 using FastTechKitchen.Domain.Interfaces;
 using System.Linq.Expressions;
-using System.Text.Json;
+using CTT = FastTech.Contracts.DataTransferObjects;
+using DTO = FastTechKitchen.Application.DataTransferObjects;
 using EN = FastTechKitchen.Domain.Entities;
 using MSG = FastTechKitchen.Application.DataTransferObjects.MessageBrokers;
 
@@ -26,27 +25,37 @@ public class PedidoApplicationService : IPedidoApplicationService
         _mapper = mapper;
     }
 
-    public async Task<Pedido> Add(BasicPedido model)
+    // O método principal Add agora usa o tipo CTT.BasicPedido para evitar ambiguidade.
+    public async Task<DTO.Pedido> Add(CTT.PedidoMessage model)
     {
-        // 1. Mapeia apenas os campos do Pedido
-        var pedidoEntity = _mapper.Map<EN.Pedido>(model);
+        
+        var itensDoPedido = model.Pedido;
 
-        // 2. Salva; aqui o EF gera o Id
-        pedidoEntity = await _PedidoService.Add(pedidoEntity);
+        DTO.Pedido ultimoPedidoSalvo = null;
 
-        // 3. Agora cria cada item com Id novo e o Id do pedido recém‑gerado
-        foreach (var item in model.Itens)
+        foreach (var itemContrato in itensDoPedido)
         {
-            item.PedidoId = pedidoEntity.Id;
-            await _pedidoItemCardapioAppService.Add(item);
+
+            var pedidoEntity = _mapper.Map<EN.Pedido>(itemContrato);
+            pedidoEntity = await _PedidoService.Add(pedidoEntity);
+            var itemDto = _mapper.Map<DTO.BasicPedidoItemCardapio>(itemContrato);
+            itemDto.PedidoId = pedidoEntity.Id;
+
+            await _pedidoItemCardapioAppService.Add(itemDto);
+
+            ultimoPedidoSalvo = _mapper.Map<DTO.Pedido>(pedidoEntity);
         }
 
-        return _mapper.Map<Pedido>(pedidoEntity);
+        if (ultimoPedidoSalvo == null)
+        {
+            throw new InvalidOperationException("Nenhum item de pedido foi processado.");
+        }
+
+        return ultimoPedidoSalvo;
     }
 
-
     // Os outros métodos permanecem iguais
-    public async Task<Pedido> Update(Pedido model)
+    public async Task<DTO.Pedido> Update(DTO.Pedido model)
     {
         var Pedido = await _PedidoService.GetById(model.Id, include: false, tracking: true);
         if (Pedido == null)
@@ -54,23 +63,24 @@ public class PedidoApplicationService : IPedidoApplicationService
 
         _mapper.Map(model, Pedido);
         Pedido = await _PedidoService.Update(Pedido);
-        return _mapper.Map<Pedido>(Pedido);
+        return _mapper.Map<DTO.Pedido>(Pedido);
     }
 
-    public async Task<Pedido> Add(MSG.BasicPedido model)
+    // Mantenha este se ainda for usado internamente
+    public async Task<DTO.Pedido> Add(MSG.BasicPedido model)
     {
         var Pedido = _mapper.Map<EN.Pedido>(model);
         Pedido = await _PedidoService.Add(Pedido);
-        return _mapper.Map<Pedido>(Pedido);
+        return _mapper.Map<DTO.Pedido>(Pedido);
     }
 
-    public async Task<IEnumerable<Pedido>> FindBy(Expression<Func<EN.Pedido, bool>> expression)
+    public async Task<IEnumerable<DTO.Pedido>> FindBy(Expression<Func<EN.Pedido, bool>> expression)
     {
         var pedidos = _PedidoService.FindBy(expression);
-        return _mapper.Map<IEnumerable<Pedido>>(pedidos);
+        return _mapper.Map<IEnumerable<DTO.Pedido>>(pedidos);
     }
 
-    public async Task<Pedido> Update(MSG.Pedido model)
+    public async Task<DTO.Pedido> Update(MSG.Pedido model)
     {
         var Pedido = await _PedidoService.GetById(model.Id, include: false, tracking: true);
         if (Pedido == null)
@@ -78,13 +88,13 @@ public class PedidoApplicationService : IPedidoApplicationService
 
         _mapper.Map(model, Pedido);
         Pedido = await _PedidoService.Update(Pedido);
-        return _mapper.Map<Pedido>(Pedido);
+        return _mapper.Map<DTO.Pedido>(Pedido);
     }
 
-    public async Task<Pedido> GetById(Guid id)
+    public async Task<DTO.Pedido> GetById(Guid id)
     {
         var Pedido = await _PedidoService.GetById(id, include: false, tracking: false);
-        return _mapper.Map<Pedido>(Pedido);
+        return _mapper.Map<DTO.Pedido>(Pedido);
     }
 
     public void Dispose()

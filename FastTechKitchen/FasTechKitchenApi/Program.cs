@@ -37,7 +37,7 @@ builder.Configuration
 builder.Services.Configure<FastTechSettings>(builder.Configuration);
 
 //builder.Services.AddHealthChecks().ForwardToPrometheus();
-builder.WebHost.UseUrls("http://localhost:5056");
+builder.WebHost.UseUrls("http://localhost:5057");
 
 builder.Services.AddControllers(options => options.Filters.Add<UserFilter>()).AddNewtonsoftJson(options =>
 {
@@ -135,11 +135,12 @@ builder.Services.AddScoped(x => new UserData());
 #endregion
 
 #region MassTransit
+
 // 1. Adicionar o Consumer que criaremos a partir do PedidoApplicationService
 builder.Services.AddMassTransit(x =>
 {
-    // Adiciona o consumidor. Substitua 'PedidoConsumer' pelo nome do seu novo consumidor.
-    x.AddConsumer<PedidoConsumer>(); // <--- NOVO CONSUMER (ver item 6)
+    // Adiciona o consumidor.
+    x.AddConsumer<PedidoConsumer>(); // <--- CONSUMER ADICIONADO
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -150,9 +151,14 @@ builder.Services.AddMassTransit(x =>
         cfg.Host(new Uri(rabbitMqHost));
 
         // Configura o endpoint de recebimento (a fila) para o PedidoConsumer
-        cfg.ReceiveEndpoint("fastech.pedido", e => // Nome da fila (QueueName do antigo RabbitMQ)
+        // O nome da fila deve ser EXATAMENTE o que a FastTech.Api usa no SendEndpoint.
+        cfg.ReceiveEndpoint("fasttech.pedido", e =>
         {
+            // Adiciona a configuração para o Consumidor (e suas dependências resolvidas)
             e.ConfigureConsumer<PedidoConsumer>(context);
+
+            // Adicionar uma política de retry aqui é uma boa prática
+            e.UseMessageRetry(r => r.Interval(3, TimeSpan.FromSeconds(5)));
         });
     });
 });

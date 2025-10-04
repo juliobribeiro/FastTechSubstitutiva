@@ -1,61 +1,71 @@
-﻿using FastTechKitchen.Application.DataTransferObjects;
-using FastTechKitchen.Application.Interfaces;
+﻿using FastTechKitchen.Application.Interfaces;
 using MassTransit;
-using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
-// Define a mensagem que este consumer irá processar.
-// Baseado no PedidoConsumerService antigo, a fila recebia um List<BasicPedido>.
-// O MassTransit prefere mensagens fortemente tipadas.
-// Assumindo que a mensagem do broker é de fato uma lista:
+// Define o alias CTT
+using CTT = FastTech.Contracts.DataTransferObjects;
 
 namespace FasTechKitchen.Api.Robots.RabbitMQ
 {
-    public class PedidoConsumer : IConsumer<List<BasicPedido>> // Altere <List<BasicPedido>> se a mensagem for outra
+    // Consome a mensagem do Contrato
+    public class PedidoConsumer : IConsumer<CTT.PedidoMessage>
     {
-        private readonly IPedidoApplicationService _pedidoAppService;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<PedidoConsumer> _logger;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public PedidoConsumer(IServiceScopeFactory scopeFactory, ILogger<PedidoConsumer> logger, IPedidoApplicationService pedidoAppService)
+        public PedidoConsumer(IServiceScopeFactory scopeFactory, ILogger<PedidoConsumer> logger, IPublishEndpoint publishEndpoint)
         {
             _scopeFactory = scopeFactory;
             _logger = logger;
-            _pedidoAppService = pedidoAppService;
+            _publishEndpoint = publishEndpoint;
         }
 
-        public async Task Consume(ConsumeContext<List<BasicPedido>> context)
+        public async Task Consume(ConsumeContext<CTT.PedidoMessage> context)
         {
-            var pedidos = context.Message;
+            var mensagemCompleta = context.Message;
+            var pedidosDoContrato = mensagemCompleta.Pedido;
 
-            _logger.LogInformation($"Recebido um lote de {pedidos.Count} pedidos.");
+            _logger.LogInformation($"[MassTransit] Recebido lote com {pedidosDoContrato.Count} itens para processamento.");
+
+            using var scope = _scopeFactory.CreateScope();
+            var pedidoAppService = scope.ServiceProvider.GetRequiredService<IPedidoApplicationService>();
 
             try
             {
-                // O MassTransit lida com a desserialização e injeção do escopo,
-                // mas o IServiceScopeFactory garante que a injeção do ApplicationService seja resolvida
-                // (visto que ele provavelmente tem dependências de DbContext, que são Scoped).
-                using var scope = _scopeFactory.CreateScope();
-                var pedidoAppService = scope.ServiceProvider.GetRequiredService<IPedidoApplicationService>();
+                // Passa a mensagem completa para o ApplicationService para que ele itere e salve.
+                var ultimoPedidoSalvo = await pedidoAppService.Add(mensagemCompleta);
 
-                foreach (var pedido in pedidos)
+                _logger.LogInformation($"[MassTransit] Lote de pedidos processado com sucesso. Último Pedido Id: {ultimoPedidoSalvo.Id}");
+
+                // Publica a resposta de volta (Confirmação de Pedido Registrado)
+                await _publishEndpoint.Publish(new CTT.PedidoRegistradoMessage
                 {
-                    // Chama o método Add que está no seu PedidoApplicationService.
-                    // O método Add retorna a entidade Pedido (com o ID gerado).
-                    var pedidoSalvo = await _pedidoAppService.Add(pedido);
-
-                    // Logamos o ID gerado pelo sistema.
-                    _logger.LogInformation($"[MassTransit] Pedido Id {pedidoSalvo.Id} (Forma: {pedido.FormaDeEntrega}) processado com sucesso.");
-                }
+                    // Usa a propriedade PedidoId
+                    PedidoId = ultimoPedidoSalvo.Id,
+                    // Usa a propriedade Status (Corrigido o erro CS0117)
+                    Status = "GRAVADO_SUCESSO",
+                    // Adiciona o CorrelationId da mensagem recebida
+                    CorrelationId = context.CorrelationId.GetValueOrDefault()
+                });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao processar a mensagem do PedidoConsumer.");
-                // O MassTransit irá tentar a reentrega por padrão.
-                // Se falhar permanentemente, a mensagem vai para a fila de erro (DLQ).
+
+                // Opcional: Publicar uma mensagem de falha/erro.
+                await _publishEndpoint.Publish(new CTT.PedidoRegistradoMessage
+                {
+                    PedidoId = Guid.Empty, // Ou o ID do pedido que causou a falha, se for possível isolar
+                    Status = "FALHA_PROCESSAMENTO",
+                    CorrelationId = context.CorrelationId.GetValueOrDefault()
+                });
+
+                // Re-lança para que o MassTransit possa fazer o re-try, se configurado.
                 throw;
             }
-
-            await Task.CompletedTask;
         }
     }
 }
