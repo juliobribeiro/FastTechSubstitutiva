@@ -3,6 +3,7 @@ using FasTechKitchen.Api.Logging;
 using FasTechKitchen.Api.Robots.RabbitMQ;
 using FastTech.Contracts.DataTransferObjects;
 using FastTechKitchen.Application.Interfaces;
+using FastTechKitchen.Application.Mappings;
 using FastTechKitchen.Application.Services;
 using FastTechKitchen.Domain.Entities;
 using FastTechKitchen.Domain.Interfaces;
@@ -14,6 +15,7 @@ using FastTechKitchen.Infraestructure.Data.Repositories;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -73,6 +75,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AllowNullDestinationValues = true;
     cfg.AllowNullCollections = true;
     cfg.AddMaps(typeof(BaseModel).Assembly);
+    cfg.AddMaps(typeof(PedidoMapper).Assembly);
 });
 
 builder.Logging.ClearProviders();

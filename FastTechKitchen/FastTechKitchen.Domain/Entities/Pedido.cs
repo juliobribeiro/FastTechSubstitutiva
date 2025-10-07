@@ -5,6 +5,8 @@
         public int FormaDeEntrega { get; set; }
         public bool Ativo { get; set; }
 
+        public Guid? ClienteId { get; set; } // Permitindo nullable se for opcional no Contrato
+
         // Relação 1:N com PedidoItemCardapio
         public List<PedidoItemCardapio> Itens { get; set; } = new();
 

@@ -20,7 +20,7 @@ public class PedidoItemCardapioConfiguration : BaseEntityConfiguration<PedidoIte
         builder.HasOne<Pedido>()
             .WithMany()
             .HasForeignKey(u => u.PedidoId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict); 
 
         // Relacionamento com ItemCardapio (N:1)
         builder.HasOne<ItemCardapio>()
@@ -28,7 +28,7 @@ public class PedidoItemCardapioConfiguration : BaseEntityConfiguration<PedidoIte
             .HasForeignKey(u => u.ItemCardapioId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Chave composta (opcional, se quiser evitar duplicidade do mesmo item em um pedido)
+        // Chave composta
         builder.HasIndex(u => new { u.PedidoId, u.ItemCardapioId }).IsUnique();
 
     }

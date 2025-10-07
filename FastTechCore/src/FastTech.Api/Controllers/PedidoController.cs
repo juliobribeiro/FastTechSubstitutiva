@@ -2,10 +2,9 @@
 using FastTech.Contracts;
 using FastTech.Contracts.DataTransferObjects;
 using MassTransit;
-using MassTransit.Transports;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+
 using static FastTech.Domain.Constants.AppConstants;
 
 namespace FastTech.Api.Controllers

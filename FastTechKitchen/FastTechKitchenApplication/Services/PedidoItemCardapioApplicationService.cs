@@ -22,7 +22,7 @@ public class PedidoItemCardapioApplicationService(IPedidoItemCardapioService ped
         return _mapper.Map<PedidoItemCardapio>(PedidoItemCardapio);
     }
 
-    public async Task<PedidoItemCardapio> Update(PedidoItemCardapio model)
+    public async Task<EN.PedidoItemCardapio> Update(PedidoItemCardapio model)
     {
         var PedidoItemCardapio = await _PedidoItemCardapioService.GetById(model.Id, include: false, tracking: true);
         if (PedidoItemCardapio == null)
@@ -32,19 +32,19 @@ public class PedidoItemCardapioApplicationService(IPedidoItemCardapioService ped
 
         PedidoItemCardapio = await _PedidoItemCardapioService.Update(PedidoItemCardapio);
 
-        return _mapper.Map<PedidoItemCardapio>(PedidoItemCardapio);
+        return _mapper.Map<EN.PedidoItemCardapio>(PedidoItemCardapio);
     }
 
-    public async Task<PedidoItemCardapio> Add(DataTransferObjects.MessageBrokers.BasicPedidoItemCardapio model)
+    public async Task<EN.PedidoItemCardapio> Add(EN.PedidoItemCardapio model)
     {
         var PedidoItemCardapio = _mapper.Map<Domain.Entities.PedidoItemCardapio>(model);
 
         PedidoItemCardapio = await _PedidoItemCardapioService.Add(PedidoItemCardapio);
 
-        return _mapper.Map<PedidoItemCardapio>(PedidoItemCardapio);
+        return _mapper.Map<EN.PedidoItemCardapio>(PedidoItemCardapio);
     }
 
-    public async Task<PedidoItemCardapio> Update(DataTransferObjects.MessageBrokers.PedidoItemCardapio model)
+    public async Task<EN.PedidoItemCardapio> Update(EN.PedidoItemCardapio model)
     {
         var PedidoItemCardapio = await _PedidoItemCardapioService.GetById(model.Id, include: false, tracking: true);
         if (PedidoItemCardapio == null)
@@ -54,13 +54,13 @@ public class PedidoItemCardapioApplicationService(IPedidoItemCardapioService ped
 
         PedidoItemCardapio = await _PedidoItemCardapioService.Update(PedidoItemCardapio);
 
-        return _mapper.Map<PedidoItemCardapio>(PedidoItemCardapio);
+        return _mapper.Map<EN.PedidoItemCardapio>(PedidoItemCardapio);
     }
 
-    public async Task<PedidoItemCardapio> GetById(Guid id)
+    public async Task<EN.PedidoItemCardapio> GetById(Guid id)
     {
         var PedidoItemCardapio = await _PedidoItemCardapioService.GetById(id, include: false, tracking: false);
-        return _mapper.Map<PedidoItemCardapio>(PedidoItemCardapio);
+        return _mapper.Map<EN.PedidoItemCardapio>(PedidoItemCardapio);
     }
 
 
@@ -71,4 +71,5 @@ public class PedidoItemCardapioApplicationService(IPedidoItemCardapioService ped
 
         GC.SuppressFinalize(this);
     }
+
 }
