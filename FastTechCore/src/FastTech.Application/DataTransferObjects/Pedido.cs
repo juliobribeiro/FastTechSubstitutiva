@@ -6,11 +6,11 @@ namespace FastTech.Application.DataTransferObjects
     public class Pedido : BaseModel
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid PedidoId { get; set; }
 
-        [JsonPropertyName("itemCardapioId")]
-        [Required(ErrorMessage = "O campo ItemCardapioId é obrigatório.")]
-        public Guid ItemCardapioId { get; set; }
+        [JsonPropertyName("itensCardapio")]
+        [Required(ErrorMessage = "O campo ItensCardapio é obrigatório.")]
+        public List<ItemCardapio> ItensCardapio { get; set; }
 
         [JsonPropertyName("formaDeEntrega")]
         [Required(ErrorMessage = "O campo Descrição é obrigatório.")]
@@ -21,13 +21,13 @@ namespace FastTech.Application.DataTransferObjects
         public bool Ativo { get; set; }
         public Pedido() : base() { }
 
-        public Pedido(Guid id, Guid itemCardapioId, int formaDeEntrega, bool ativo,
+        public Pedido(Guid pedidoId, List<ItemCardapio> itensCardapioId, int formaDeEntrega, bool ativo,
                             DateTime createdAt, Guid createdBy,
                             DateTime? updatedAt, Guid? updatedBy,
                             bool removed, DateTime? removedAt, Guid? removedBy)
         {
-            Id = id;
-            ItemCardapioId = itemCardapioId;
+            PedidoId = pedidoId;
+            ItensCardapio = itensCardapioId;
             FormaDeEntrega = formaDeEntrega;
             Ativo = ativo;
             CreatedAt = createdAt;

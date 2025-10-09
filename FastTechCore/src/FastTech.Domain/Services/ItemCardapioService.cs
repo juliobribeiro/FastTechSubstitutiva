@@ -21,10 +21,10 @@ public class ItemCardapioService(IItemCardapioRepository ItemCardapioRepository,
 
     public override async Task<ItemCardapio> Add(ItemCardapio entity)
     {
-        var ItemCardapio = await _ItemCardapioRepository.GetById(entity.Id);
+        //var ItemCardapio = await _ItemCardapioRepository.GetById(entity.Id);
 
-        if (ItemCardapio != null)
-            throw new ValidationException("O ItemCardapio já existe.");
+        //if (ItemCardapio != null)
+        //    throw new ValidationException("O ItemCardapio já existe.");
 
         return await base.Add(entity);
     }

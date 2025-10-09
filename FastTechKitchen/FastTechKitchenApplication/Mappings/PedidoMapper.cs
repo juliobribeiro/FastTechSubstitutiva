@@ -21,6 +21,7 @@ namespace FastTechKitchen.Application.Mappings
             CreateMap<CTT.BasicPedido, EN.Pedido>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 // Mapeamento Explícito
+                .ForMember(dest => dest.Itens, opt => opt.MapFrom(src => src.Items))
                 .ForMember(dest => dest.ClienteId, opt => opt.MapFrom(src => src.ClienteId))
                 .ForMember(dest => dest.FormaDeEntrega, opt => opt.MapFrom(src => src.FormaDeEntrega))
                 .ForMember(dest => dest.Ativo, opt => opt.MapFrom(src => src.Ativo))
@@ -29,6 +30,7 @@ namespace FastTechKitchen.Application.Mappings
             // CONTRATO ITEM BÁSICO (CTT.BasicPedidoItemCardapio) -> ENTIDADE PEDIDO ITEM CARDAPIO (PedidoItemCardapio)
             // Necessário para o loop interno no Consumer
             CreateMap<CTT.BasicPedidoItemCardapio, EN.PedidoItemCardapio>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.PedidoId, opt => opt.Ignore());
 

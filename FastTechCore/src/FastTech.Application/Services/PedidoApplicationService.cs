@@ -24,7 +24,7 @@ public class PedidoApplicationService(IPedidoService PedidoService, IMapper mapp
 
     public async Task<Pedido> Update(Pedido model)
     {
-        var Pedido = await _PedidoService.GetById(model.Id, include: false, tracking: true);
+        var Pedido = await _PedidoService.GetById(model.PedidoId, include: false, tracking: true);
         if (Pedido == null)
             throw new Exception("O Item do Cardapio não existe.");
 

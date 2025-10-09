@@ -9,13 +9,21 @@ public class ItemCardapio : BaseEntity
 
     public ItemCardapio() : base() { }
 
+    //public ItemCardapio(string nome, string descricao, double preco, bool disponivel, Guid userId) : base()
+    //{
+    //    Nome = nome;
+    //    Descricao = descricao;
+    //    Preco = preco;
+    //    Disponivel = disponivel;
+
+    //    PrepareToInsert(userId);
+    //}
     public ItemCardapio(string nome, string descricao, double preco, bool disponivel, Guid userId) : base()
     {
         Nome = nome;
         Descricao = descricao;
         Preco = preco;
         Disponivel = disponivel;
-
         PrepareToInsert(userId);
     }
 }

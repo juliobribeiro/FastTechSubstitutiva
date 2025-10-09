@@ -21,6 +21,28 @@ public class PedidoService(IPedidoRepository PedidoRepository, UserData userData
 
     public override async Task<Pedido> Add(Pedido entity)
     {
+        //var existing = await _PedidoRepository.GetById(entity.Id);
+
+        //if (existing != null)
+        //{
+        //    // Atualiza os campos necessários
+        //    _repository.DetachAsync(existing); // Desanexa do DbContext
+
+        //    entity.PrepareToUpdate(_userData.Id); // Se você usa campos como UpdatedAt, UpdatedBy
+        //    return await _repository.Update(entity); // OU use _PedidoRepository.Update
+        //}
+
+        //entity.PrepareToInsert(_userData.Id);
+        //return await _repository.Add(entity);
+        // ⚠️ CORREÇÃO: Se o Id estiver vazio, é uma nova entidade. 
+        // Pule a busca no repositório e vá direto para a inserção.
+        if (entity.Id == Guid.Empty)
+        {
+            entity.PrepareToInsert(_userData.Id);
+            return await _repository.Add(entity);
+        }
+
+        // Se o Id NÃO estiver vazio, verificamos se a entidade já existe (cenário de UPSERT/Idempotência)
         var existing = await _PedidoRepository.GetById(entity.Id);
 
         if (existing != null)
@@ -28,10 +50,11 @@ public class PedidoService(IPedidoRepository PedidoRepository, UserData userData
             // Atualiza os campos necessários
             _repository.DetachAsync(existing); // Desanexa do DbContext
 
-            entity.PrepareToUpdate(_userData.Id); // Se você usa campos como UpdatedAt, UpdatedBy
-            return await _repository.Update(entity); // OU use _PedidoRepository.Update
+            entity.PrepareToUpdate(_userData.Id);
+            return await _repository.Update(entity);
         }
 
+        // Se o Id não está vazio, mas não existe no banco, tratamos como nova inserção (ex: Id forçado).
         entity.PrepareToInsert(_userData.Id);
         return await _repository.Add(entity);
     }
